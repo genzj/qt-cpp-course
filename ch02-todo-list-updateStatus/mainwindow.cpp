@@ -10,6 +10,16 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     connect(ui->addTaskButton, &QPushButton::clicked, this, &MainWindow::addTask);
+
+
+    // not working for signature incompatibility
+//    connect(ui->addTaskButton, &QPushButton::clicked, this, &MainWindow::taskStatusChanged);
+
+    // working when taskStatusChanged has default parameter (nullptr)
+    connect(ui->addTaskButton, SIGNAL(clicked()), this, SLOT(taskStatusChanged()));
+
+    // working with C++11
+//    connect(ui->addTaskButton, &QPushButton::clicked, this, [this]() {this->taskStatusChanged(nullptr);});
 }
 
 MainWindow::~MainWindow()
@@ -24,9 +34,11 @@ void MainWindow::addTask()
             this, &MainWindow::taskStatusChanged);
     connect(task, &Task::removed,
             this, &MainWindow::removeOneTask);
+    // not working, signal will be cancelled at task instance's deletion
+//    connect(task, &Task::removed,
+//            this, &MainWindow::taskStatusChanged);
     mTasks.append(task);
     ui->tasksLayout->addWidget(task);
-    updateStatus();
 }
 
 void MainWindow::removeOneTask(Task* task)
@@ -35,15 +47,10 @@ void MainWindow::removeOneTask(Task* task)
     ui->tasksLayout->removeWidget(task);
     task->setParent(nullptr);
     delete task;
-    updateStatus();
+    taskStatusChanged();
 }
 
 void MainWindow::taskStatusChanged(Task*)
-{
-    updateStatus();
-}
-
-void MainWindow::updateStatus()
 {
     int completedCount = 0;
     for(auto t : mTasks) {
@@ -57,4 +64,10 @@ void MainWindow::updateStatus()
                 .arg(todoCount)
                 .arg(completedCount)
                 );
+}
+
+
+void MainWindow::showEvent(QShowEvent *event) {
+    QMainWindow::showEvent(event);
+    taskStatusChanged();
 }
