@@ -3,6 +3,8 @@
 
 #include <QColor>
 
+#include <algorithm>
+
 TrackModel::TrackModel()
     : mDb(DatabaseManager::instance())
     , mTracks(mDb.trackDao.tracks())
@@ -73,4 +75,31 @@ QVariant TrackModel::data(const QModelIndex& index, int role) const
         return index.row() % 2 ? QVariant(QColor(Qt::lightGray)) : QVariant();
     }
     return QVariant();
+}
+
+#include <QDebug>
+void TrackModel::sort(int column, Qt::SortOrder order)
+{
+    qDebug() << "sort.." << column << " " << order;
+    auto cmp = [column, order](const std::unique_ptr<Track> &t1, const std::unique_ptr<Track> &t2) {
+        bool ret = true;
+        switch (column) {
+        case 0:
+            ret = t1->id() < t2->id();
+            break;
+        case 1:
+            ret = t1->name() < t2->name() || (t1->name() == t2->name() && t1->id() < t2->id());
+            break;
+        case 2:
+            ret = t1->album() < t2->album() || (t1->album() == t2->album() && t1->id() < t2->id());
+            break;
+        case 3:
+            ret = t1->artist() < t2->artist() || (t1->artist() == t2->artist() && t1->id() < t2->id());
+            break;
+        }
+        return order == Qt::AscendingOrder ? ret : !ret;
+    };
+    emit layoutAboutToBeChanged(QList<QPersistentModelIndex>(), QAbstractItemModel::VerticalSortHint);
+    std::sort(mTracks->begin(), mTracks->end(), cmp);
+    emit layoutChanged(QList<QPersistentModelIndex>(), QAbstractItemModel::VerticalSortHint);
 }
