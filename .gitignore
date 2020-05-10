@@ -72,3 +72,5 @@ build-*_MinGW_*/
 *.dll
 *.exe
 
+build-*/
+
