@@ -66,3 +66,8 @@ void MainWindow::taskStatusChanged(Task*)
                 .arg(completedCount)
                 );
 }
+
+void MainWindow::showEvent(QShowEvent *event) {
+    QMainWindow::showEvent(event);
+    taskStatusChanged();
+}

@@ -19,6 +19,9 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
 
+protected:
+    void showEvent(QShowEvent *event) override;
+
 private:
     Ui::MainWindow *ui;
     QVector<Task*> mTasks;
