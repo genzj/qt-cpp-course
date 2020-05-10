@@ -15,7 +15,7 @@ void Worker::incomingMessage()
 {
     QByteArray msg = client->readAll();
     if (msg.length() == 0 || msg.endsWith(0x04)) {
-        close();
+        client->disconnectFromHost();
     } else {
         client->write(msg);
         emit progress(QString("message received from %1:%2: %3").arg(
@@ -30,13 +30,16 @@ void Worker::incomingMessage()
 
 void Worker::close()
 {
+    if (client == nullptr) {
+        return;
+    }
     emit progress(QString("%1:%2 disconnected").arg(
         client->peerAddress().toString()
     ).arg(
         client->peerPort()
     ));
-    client->disconnectFromHost();
     client->deleteLater();
+    client = nullptr;
     deleteLater();
     emit closed();
 }
