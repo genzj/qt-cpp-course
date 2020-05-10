@@ -34,9 +34,8 @@ void MainWindow::addTask()
             this, &MainWindow::taskStatusChanged);
     connect(task, &Task::removed,
             this, &MainWindow::removeOneTask);
-    // not working, signal will be cancelled at task instance's deletion
-//    connect(task, &Task::removed,
-//            this, &MainWindow::taskStatusChanged);
+    connect(task, &Task::removed,
+            this, &MainWindow::taskStatusChanged);
     mTasks.append(task);
     ui->tasksLayout->addWidget(task);
 }
@@ -46,8 +45,10 @@ void MainWindow::removeOneTask(Task* task)
     mTasks.removeOne(task);
     ui->tasksLayout->removeWidget(task);
     task->setParent(nullptr);
-    delete task;
-    taskStatusChanged();
+    // other slot invocations will be cancelled at task instance's deletion
+    // deleting a QObject directly/explictly is not a good practice in Qt
+//    delete task;
+    task->deleteLater();
 }
 
 void MainWindow::taskStatusChanged(Task*)
@@ -64,10 +65,4 @@ void MainWindow::taskStatusChanged(Task*)
                 .arg(todoCount)
                 .arg(completedCount)
                 );
-}
-
-
-void MainWindow::showEvent(QShowEvent *event) {
-    QMainWindow::showEvent(event);
-    taskStatusChanged();
 }
