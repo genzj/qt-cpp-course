@@ -6,15 +6,32 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>739</width>
-    <height>465</height>
+    <width>493</width>
+    <height>162</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>SysInfo</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QHBoxLayout" name="horizontalLayout"/>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QGroupBox" name="cpuBox">
+      <property name="title">
+       <string>CPU Usage</string>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_2"/>
+     </widget>
+    </item>
+    <item>
+     <widget class="QGroupBox" name="ramBox">
+      <property name="title">
+       <string>RAM Usage</string>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_3"/>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
  </widget>

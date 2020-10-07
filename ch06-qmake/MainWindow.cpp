@@ -12,8 +12,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     SysInfo::instance().init();
-    ui->centralWidget->layout()->addWidget(&mCpuWidget);
-    ui->centralWidget->layout()->addWidget(&mMemoryWidget);
+    ui->cpuBox->layout()->addWidget(&mCpuWidget);
+    ui->ramBox->layout()->addWidget(&mMemoryWidget);
 }
 
 MainWindow::~MainWindow()

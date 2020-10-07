@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <QTimer>
-#include <QtCharts/QChartView>
+#include <QLCDNumber>
 
 class SysInfoWidget : public QWidget
 {
@@ -14,14 +14,13 @@ public:
                            int updateSeriesDelayMs = 500);
 
 protected:
-    QtCharts::QChartView& chartView();
+    QLCDNumber mDisplayer;
 
 protected slots:
     virtual void updateSeries() = 0;
 
 private:
     QTimer mRefreshTimer;
-    QtCharts::QChartView mChartView;
 };
 
 #endif // SYSINFOWIDGET_H

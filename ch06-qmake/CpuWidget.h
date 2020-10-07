@@ -1,8 +1,6 @@
 #ifndef CPUWIDGET_H
 #define CPUWIDGET_H
 
-#include <QtCharts/QPieSeries>
-
 #include "SysInfoWidget.h"
 
 class CpuWidget : public SysInfoWidget
@@ -13,9 +11,6 @@ public:
 
 protected slots:
     void updateSeries() override;
-
-private:
-    QtCharts::QPieSeries* mSeries;
 };
 
 #endif // CPUWIDGET_H
